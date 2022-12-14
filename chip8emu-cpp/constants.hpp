@@ -46,6 +46,16 @@ namespace chip8_emu
     constexpr uint8_t kNumberOfGeneralRegisters = 0x10;
 
     //
+    // Location of the sprites in memory.
+    //
+    constexpr uint16_t kSpritesAddress = 0x0000;
+
+    //
+    // Size of a sprite in bytes
+    //
+    constexpr uint8_t kSpriteSize = 5U;
+
+    //
     // CHIP-8 registers
     //
     struct Registers
@@ -68,23 +78,52 @@ namespace chip8_emu
         uint8_t v[kNumberOfGeneralRegisters];
     };
 
-    //
-    // Instruction masks
-    //
-    constexpr uint16_t kFirstNibbleMask = 0xF000;
-    constexpr uint16_t kSecondNibbleMask = 0x0F00;
-    constexpr uint16_t kThirdNibbleMask = 0x00F0;
-    constexpr uint16_t kFourthNibbleMask = 0x000F;
+    using OpcodeType = uint16_t;
 
-    constexpr uint16_t kFirstByteMask = kFirstNibbleMask | kSecondNibbleMask;
-    constexpr uint16_t kLastByteMask = kThirdNibbleMask | kFourthNibbleMask;
+#pragma warning(disable : 4201)
+    struct Opcode
+    {
+        union
+        {
+            struct
+            {
+                // Reversed for little endian.
+                uint8_t nib1 : 4;
+                uint8_t nib0 : 4;
+            };
+            uint8_t first_byte;
+        };
+        union
+        {
+            struct
+            {
+                // Reversed for little endian.
+                uint8_t nib3 : 4;
+                uint8_t nib2 : 4;
 
-    using Opcode = uint16_t;
+            };
+            uint8_t second_byte;
+        };
+
+        std::string ToString() const
+        {
+            return std::format("{:#06x}", (first_byte << 8) | second_byte);
+        }
+    };
+
+    //
+    // Overload << so the opcode can be printed easily.
+    //
+    std::ostream& operator<<(std::ostream& os, Opcode const& arg)
+    {
+        os << arg.ToString();
+        return os;
+    }
 
     //
     // Instruction opcodes
     //
-    enum class Instruction : Opcode
+    enum class Instruction : OpcodeType
     {
         // 0x0 instructions
         kSys = 0x0000,
@@ -113,11 +152,44 @@ namespace chip8_emu
         kAddToRegister = 0x7000,
 
         // 0x8 instructions
+        kSetVxVy = 0x8000,
+        kOrVxVy = 0x8001,
+        kAndVxVy = 0x8002,
+        kXorVxVy = 0x8003,
+        kAddVxVy = 0x8004,
+        kSubVxVy = 0x8005,
+        kShrVxVy = 0x8006,
+        kSubnVxVy = 0x8007,
+        kShlVxVy = 0x800E,
+
+        // 0x9 instructions
+        kSkipNextInstructionIfXNotEqY = 0x9000,
 
         // 0xA instructions
         kSetIndexRegister = 0xA000,
 
+        // 0xB instruction
+        kJumpOffset = 0xB000,
+
+        // 0xC instructions
+        kRandom = 0xC000,
+
         // 0xD instructions
         kDraw = 0xD000,
+
+        // 0xE instruction
+        kSkipIfPressed = 0xE09E,
+        kSkipIfNotPressed = 0xE0A1,
+
+        // 0xF instructions
+        kStoreDelayTimer = 0xF007,
+        kStoreKeyPress = 0xF00A,
+        kSetDelayTimer = 0xF015,
+        kSetSoundTimer = 0xF018,
+        kAddIVx = 0xF01E,
+        kSetSpriteFromVx = 0xF029,
+        kStoreBcdFromVx = 0xF033,
+        kStoreRegisters = 0xF055,
+        kSetRegisters = 0xF065,
     };
 }

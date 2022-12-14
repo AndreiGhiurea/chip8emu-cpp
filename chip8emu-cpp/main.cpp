@@ -2,9 +2,15 @@
 
 #include "cpu.hpp"
 
-int main()
+int main(int argc, char** argv)
 {
-    std::ifstream io("ibm_logo.ch8", std::ios::binary | std::ios::ate);
+    if (argc < 2)
+    {
+        std::cout << std::format("Usage: {} <rom_file>", argv[0]);
+        return 1;
+    }
+
+    std::ifstream io(argv[1], std::ios::binary | std::ios::ate);
     const auto size = io.tellg();
     io.seekg(0, std::ios::beg);
 
@@ -21,4 +27,6 @@ int main()
     {
         std::cout << "Unexpected error: " << err.what() << std::endl;
     }
+
+    return 0;
 }
