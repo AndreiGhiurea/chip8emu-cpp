@@ -2,9 +2,8 @@
 
 Yet another CHIP-8 Emulator written in C++.
 
-Wrote this because I wanted to get into the emudev world.\
-It has all instructions implemented, sans sound ofc.\
-Will try to follow up with a NES emulator after I translate this one into Rust (cause I wanna learn Rust).
+Wrote this as an intro for emulator development.\
+It has all instructions implemented, sans sound.\
 
 ## Usage
 
