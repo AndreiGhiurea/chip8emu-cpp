@@ -3,7 +3,7 @@
 Yet another CHIP-8 Emulator written in C++.
 
 Wrote this as an intro for emulator development.\
-It has all instructions implemented, sans sound.\
+It has all instructions implemented, sans sound.
 
 ## Usage
 
