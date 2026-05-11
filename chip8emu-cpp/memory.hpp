@@ -23,7 +23,7 @@ namespace chip8_emu
         {
             if (offset >= kMemorySize)
             {
-                throw std::runtime_error{ std::format("Can't access memory at offset {}, there's only {} bytes of memory", offset, kMemorySize) };
+                throw std::runtime_error{ std::format("Could not access memory at offset {}, there's only {} bytes of memory", offset, kMemorySize) };
             }
 
             return &data_[offset];
@@ -33,7 +33,7 @@ namespace chip8_emu
         {
             if (offset + bytes.size() > kMemorySize)
             {
-                throw std::runtime_error{ std::format("Can't write {} bytes from offset {}, there's only {} bytes of memory", bytes.size(), offset, kMemorySize) };
+                throw std::runtime_error{ std::format("Could not write {} bytes from offset {}, there's only {} bytes of memory", bytes.size(), offset, kMemorySize) };
             }
 
             std::memcpy(&data_[offset], bytes.data(), bytes.size());

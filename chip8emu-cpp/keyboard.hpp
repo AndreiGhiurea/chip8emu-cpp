@@ -1,6 +1,7 @@
 #pragma once
 
 #include <algorithm>
+#include <cstdint>
 #include <format>
 #include <stdexcept>
 #include <unordered_map>
@@ -51,7 +52,7 @@ namespace chip8_emu
             const auto it = std::find_if(scancode_to_uint_.cbegin(), scancode_to_uint_.cend(), find_scancode);
             if (it == scancode_to_uint_.cend())
             {
-                throw std::runtime_error{ std::format("Could not find {} key", key) };
+                throw std::runtime_error{ std::format("Could not find {:#x} key", key) };
             }
 
             const auto scancode = it->first;
