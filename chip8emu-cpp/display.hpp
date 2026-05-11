@@ -1,4 +1,9 @@
 #pragma once
+#include <thread>
+#include <mutex>
+#include <condition_variable>
+#include <atomic>
+#include <cstring>
 
 #include <cstdint>
 #include <bitset>
@@ -174,7 +179,7 @@ namespace chip8_emu
             );
 
             if (window_ == nullptr) {
-                throw std::runtime_error("SDL window couldn't be created");
+                throw std::runtime_error("SDL window could not be created");
             }
 
             //
