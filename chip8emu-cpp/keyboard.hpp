@@ -1,9 +1,10 @@
 #pragma once
 #include <algorithm>
 
+#include <algorithm>
+#include <array>
 #include <format>
 #include <stdexcept>
-#include <unordered_map>
 
 #include "SDL.h"
 
@@ -29,11 +30,11 @@ namespace chip8_emu
             {
                 if (event.type == SDL_KEYDOWN)
                 {
-                    const auto it = scancode_to_uint_.find(event.key.keysym.scancode);
+                    const auto it = std::find(uint_to_scancode_.begin(), uint_to_scancode_.end(), event.key.keysym.scancode);
 
-                    if (it != scancode_to_uint_.cend())
+                    if (it != uint_to_scancode_.end())
                     {
-                        return it->second;
+                        return static_cast<uint8_t>(std::distance(uint_to_scancode_.begin(), it));
                     }
                 }
             }
@@ -43,18 +44,12 @@ namespace chip8_emu
 
         bool IsKeyPressed(const uint8_t key) const
         {
-            const auto find_scancode = [&key](const auto& item)
-            {
-                return item.second == key;
-            };
-
-            const auto it = std::find_if(scancode_to_uint_.cbegin(), scancode_to_uint_.cend(), find_scancode);
-            if (it == scancode_to_uint_.cend())
+            if (key >= uint_to_scancode_.size())
             {
                 throw std::runtime_error{ std::format("Could find {} key", key) };
             }
 
-            const auto scancode = it->first;
+            const auto scancode = uint_to_scancode_[key];
             const auto state = SDL_GetKeyboardState(nullptr);
             if (state[scancode])
             {
@@ -64,24 +59,24 @@ namespace chip8_emu
             return false;
         }
     private:
-        const std::unordered_map<SDL_Scancode, uint8_t> scancode_to_uint_
+        static constexpr std::array<SDL_Scancode, 16> uint_to_scancode_
         {
-            {SDL_SCANCODE_1, (uint8_t)0x1},
-            {SDL_SCANCODE_2, (uint8_t)0x2},
-            {SDL_SCANCODE_3, (uint8_t)0x3},
-            {SDL_SCANCODE_4, (uint8_t)0xC},
-            {SDL_SCANCODE_Q, (uint8_t)0x4},
-            {SDL_SCANCODE_W, (uint8_t)0x5},
-            {SDL_SCANCODE_E, (uint8_t)0x6},
-            {SDL_SCANCODE_R, (uint8_t)0xD},
-            {SDL_SCANCODE_A, (uint8_t)0x7},
-            {SDL_SCANCODE_S, (uint8_t)0x8},
-            {SDL_SCANCODE_D, (uint8_t)0x9},
-            {SDL_SCANCODE_F, (uint8_t)0xE},
-            {SDL_SCANCODE_Z, (uint8_t)0xA},
-            {SDL_SCANCODE_X, (uint8_t)0x0},
-            {SDL_SCANCODE_C, (uint8_t)0xB},
-            {SDL_SCANCODE_V, (uint8_t)0xF},
+            SDL_SCANCODE_X, // 0x0
+            SDL_SCANCODE_1, // 0x1
+            SDL_SCANCODE_2, // 0x2
+            SDL_SCANCODE_3, // 0x3
+            SDL_SCANCODE_Q, // 0x4
+            SDL_SCANCODE_W, // 0x5
+            SDL_SCANCODE_E, // 0x6
+            SDL_SCANCODE_A, // 0x7
+            SDL_SCANCODE_S, // 0x8
+            SDL_SCANCODE_D, // 0x9
+            SDL_SCANCODE_Z, // 0xA
+            SDL_SCANCODE_C, // 0xB
+            SDL_SCANCODE_4, // 0xC
+            SDL_SCANCODE_R, // 0xD
+            SDL_SCANCODE_F, // 0xE
+            SDL_SCANCODE_V, // 0xF
         };
     };
 }
