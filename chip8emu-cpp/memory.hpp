@@ -1,6 +1,10 @@
 #pragma once
+#include <cstring>
 
 #include <vector>
+#include <stdexcept>
+#include <format>
+#include <cstring>
 
 #include "constants.hpp"
 
@@ -61,6 +65,11 @@ namespace chip8_emu
 
         Opcode FetchOpcode(uint16_t& pc) const
         {
+            if (pc >= kMemorySize || pc + 1 >= kMemorySize)
+            {
+                throw std::runtime_error{ std::format("Can't fetch opcode at offset {}, there's only {} bytes of memory", pc, kMemorySize) };
+            }
+
             Opcode opcode;
 
             opcode.first_byte = data_[pc];

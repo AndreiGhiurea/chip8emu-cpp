@@ -1,6 +1,9 @@
 #pragma once
 
 #include <cstdint>
+#include <string>
+#include <format>
+#include <ostream>
 
 namespace chip8_emu
 {
