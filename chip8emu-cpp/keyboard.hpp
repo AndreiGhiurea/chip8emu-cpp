@@ -1,9 +1,9 @@
 #pragma once
 
+#include <algorithm>
 #include <array>
 #include <format>
 #include <stdexcept>
-#include <unordered_map>
 
 #include "SDL.h"
 
@@ -29,11 +29,11 @@ namespace chip8_emu
             {
                 if (event.type == SDL_KEYDOWN)
                 {
-                    const auto it = scancode_to_uint_.find(event.key.keysym.scancode);
+                    const auto it = std::find(uint_to_scancode_.begin(), uint_to_scancode_.end(), event.key.keysym.scancode);
 
-                    if (it != scancode_to_uint_.cend())
+                    if (it != uint_to_scancode_.end())
                     {
-                        return it->second;
+                        return static_cast<uint8_t>(std::distance(uint_to_scancode_.begin(), it));
                     }
                 }
             }
@@ -76,26 +76,6 @@ namespace chip8_emu
             SDL_SCANCODE_R, // 0xD
             SDL_SCANCODE_F, // 0xE
             SDL_SCANCODE_V, // 0xF
-        };
-
-        const std::unordered_map<SDL_Scancode, uint8_t> scancode_to_uint_
-        {
-            {uint_to_scancode_[0x1], (uint8_t)0x1},
-            {uint_to_scancode_[0x2], (uint8_t)0x2},
-            {uint_to_scancode_[0x3], (uint8_t)0x3},
-            {uint_to_scancode_[0xC], (uint8_t)0xC},
-            {uint_to_scancode_[0x4], (uint8_t)0x4},
-            {uint_to_scancode_[0x5], (uint8_t)0x5},
-            {uint_to_scancode_[0x6], (uint8_t)0x6},
-            {uint_to_scancode_[0xD], (uint8_t)0xD},
-            {uint_to_scancode_[0x7], (uint8_t)0x7},
-            {uint_to_scancode_[0x8], (uint8_t)0x8},
-            {uint_to_scancode_[0x9], (uint8_t)0x9},
-            {uint_to_scancode_[0xE], (uint8_t)0xE},
-            {uint_to_scancode_[0xA], (uint8_t)0xA},
-            {uint_to_scancode_[0x0], (uint8_t)0x0},
-            {uint_to_scancode_[0xB], (uint8_t)0xB},
-            {uint_to_scancode_[0xF], (uint8_t)0xF},
         };
     };
 }
