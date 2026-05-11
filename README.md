@@ -9,13 +9,13 @@
 ## 📖 About
 
 This project was developed as an introduction to emulator development.
-It faithfully implements all CHIP-8 instructions (with the exception of sound) and features an SDL2-based display capable of smooth rendering.
+It faithfully implements all CHIP-8 instructions (including sound) and features an SDL2-based display capable of smooth rendering.
 
 ## ✨ Features
 
 - **Standard C++**: Written using modern C++ features.
 - **SDL2 Rendering**: Uses SDL2 for fast and reliable graphics drawing.
-- **Full Instruction Set**: Emulates all CHIP-8 opcodes (sans sound).
+- **Full Instruction Set**: Emulates all CHIP-8 opcodes (including sound).
 
 ## 🚀 Getting Started
 
