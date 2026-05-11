@@ -1,7 +1,7 @@
 #pragma once
-#include <algorithm>
 
 #include <algorithm>
+#include <cstdint>
 #include <array>
 #include <format>
 #include <stdexcept>
@@ -46,7 +46,7 @@ namespace chip8_emu
         {
             if (key >= uint_to_scancode_.size())
             {
-                throw std::runtime_error{ std::format("Could find {} key", key) };
+                throw std::runtime_error{ std::format("Could not find {:#x} key", key) };
             }
 
             const auto scancode = uint_to_scancode_[key];
