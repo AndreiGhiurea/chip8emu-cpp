@@ -1,4 +1,9 @@
 #pragma once
+#include <thread>
+#include <mutex>
+#include <condition_variable>
+#include <atomic>
+#include <cstring>
 
 #include <cstdint>
 #include <bitset>

@@ -1,6 +1,6 @@
-#pragma once
 #include <thread>
 #include <chrono>
+#pragma once
 
 #include <csignal>
 #include <format>
@@ -13,7 +13,6 @@
 #include "decoder.hpp"
 #include "keyboard.hpp"
 #include "stack.hpp"
-#include "speaker.hpp"
 
 namespace chip8_emu
 {
@@ -70,12 +69,8 @@ namespace chip8_emu
 
                 if (registers_.sound_timer != 0)
                 {
+                    // Sound the buzzer I guess
                     registers_.sound_timer -= 1;
-                    speaker_.Play(true);
-                }
-                else
-                {
-                    speaker_.Play(false);
                 }
 
                 std::this_thread::sleep_for(std::chrono::milliseconds(16));
@@ -195,7 +190,7 @@ namespace chip8_emu
                 const uint8_t x = opcode.nib1;
                 const uint8_t y = opcode.nib2;
                 const uint8_t n = opcode.nib3;
-                
+
                 const uint8_t* sprite = static_cast<uint8_t*>(memory_.Data(registers_.index));
                 const auto pixel_turned_off = display_.Draw(registers_.v[x], registers_.v[y], sprite, n);
                 display_.Refresh();
@@ -306,7 +301,6 @@ namespace chip8_emu
         Memory memory_;
         Display display_;
         Keyboard keyboard_;
-        Speaker speaker_;
 
         std::thread timers_thread_;
     };
