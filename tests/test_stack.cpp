@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cassert>
 #include <stdexcept>
+#include <string>
 #include "stack.hpp"
 
 void test_stack_empty_pop() {
